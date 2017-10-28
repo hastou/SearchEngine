@@ -24,6 +24,7 @@ public class SearchEngineTFIDF extends SearchEngineImpl {
     public void indexDatabase() {
         super.indexDatabase();
         int corpusSize = descriptors.size();
+        _vocabular.clear();
         _vocabular.addCorpus(getDatabase());
         for (String term : _vocabular.get_terms().keySet()) {
             int df = _reversedIndex.getDocumentsIdContainingTerms(new String[] {term}).size();
@@ -41,7 +42,7 @@ public class SearchEngineTFIDF extends SearchEngineImpl {
             normA += Math.pow(a.get(i), 2);
             normB += Math.pow(b.get(i), 2);
         }
-        return (float) (dotProduct / (Math.sqrt(normA) * Math.sqrt(normB)));
+        return (float) Math.cos(dotProduct / (Math.sqrt(normA) * Math.sqrt(normB)));
     }
 
     @Override
