@@ -42,6 +42,11 @@ public class Vocabular {
         _terms.clear();
     }
 
+    /**
+     *
+     * @param string
+     * @return Tokenized terms of string processed by stop list and stemmer if configured
+     */
     public String[] processString(String string) {
 
         String lowerCased = string.toLowerCase();
@@ -62,10 +67,16 @@ public class Vocabular {
         return processString(document.getContent());
     }
 
+
+    /**
+     *
+     * @param string
+     * @param frequencyByTerm
+     */
     public void computeTermsFrequencyInString(String string, Map<String, Integer> frequencyByTerm) {
         String[] terms = processString(string);
         for (String term : terms) {
-            Integer frequency = _terms.get(term);
+            Integer frequency = frequencyByTerm.get(term);
             if (frequency != null) {
                 frequencyByTerm.put(term, ++frequency);
             } else {
@@ -80,6 +91,7 @@ public class Vocabular {
     }
 
     public void addCorpus(Vector<DocumentInfo> corpus) {
+        clear();
         for (DocumentInfo doc : corpus) {
             computeTermsFrequencyInString(doc.getContent(), _terms);
         }

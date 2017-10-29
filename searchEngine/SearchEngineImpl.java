@@ -10,7 +10,7 @@ public abstract class SearchEngineImpl extends SearchEngine {
 
     protected Vocabular _vocabular;
     protected ReversedIndex _reversedIndex;
-    private Map<Integer, DocumentInfo> corpus;
+    protected Map<Integer, DocumentInfo> corpus;
     protected Map<Integer, BagOfWords> descriptors;
 
     public SearchEngineImpl(Vocabular vocabular) {
@@ -35,7 +35,7 @@ public abstract class SearchEngineImpl extends SearchEngine {
      * @param b2 Second of two descriptors to compare
      * @return Computed score
      */
-    protected abstract float computeSimilarity(BagOfWords b1, BagOfWords b2);
+    protected abstract double computeSimilarity(BagOfWords b1, BagOfWords b2);
 
 
     @Override
@@ -43,7 +43,7 @@ public abstract class SearchEngineImpl extends SearchEngine {
         BagOfWords queryDescriptor = new BagOfWords(query, _vocabular);
         String[] queryTerms = queryDescriptor.getTerms().keySet().toArray(new String[queryDescriptor.getSize()]);
 
-        Map<Integer, Float> documentsScores = new TreeMap<>();
+        Map<Integer, Double> documentsScores = new TreeMap<>();
 
         Set<Integer> concernedDocumentsIds = _reversedIndex.getDocumentsIdContainingTerms(queryTerms);
 
@@ -54,6 +54,7 @@ public abstract class SearchEngineImpl extends SearchEngine {
         }
 
         Vector<DocumentInfo> queryResult = new Vector<>();
+
 
         for (Integer documentId : sortByValue(documentsScores).keySet()) {
             if (corpus.containsKey(documentId)) {

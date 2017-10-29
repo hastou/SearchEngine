@@ -10,7 +10,7 @@ import java.util.TreeMap;
 public class BagOfWords {
     private final Vocabular _vocabular;
     private Map<String, Integer> _terms;
-    private Map<String, Float> _weights;
+    private Map<String, Double> _weights;
     private int _id;
 
     public BagOfWords(DocumentInfo document, Vocabular vocabular) {
@@ -84,18 +84,26 @@ public class BagOfWords {
         return (float) commonTermsCount / (float) union.size();
     }
 
-    public void computeWeights(Map<String, Float> idf) {
+    public void computeWeights(Map<String, Double> idf) {
+
+        int documentLength = 0;
         for (String term : _terms.keySet()) {
-            float weight = _terms.get(term) * idf.getOrDefault(term, 0.0f);
+            documentLength += _terms.get(term);
+        }
+
+        for (String term : _terms.keySet()) {
+            // default zero in case query term is not in corpus
+
+            double weight = ((double)_terms.get(term)) * idf.getOrDefault(term, 0.0);
             _weights.put(term, weight);
         }
     }
 
-    public Map<String, Float> getWeights() {
+    public Map<String, Double> getWeights() {
         return _weights;
     }
 
-    public float getWeight(String term) {
-        return _weights.get(term);
+    public double getWeight(String term) {
+        return _weights.getOrDefault(term, 0.0);
     }
 }

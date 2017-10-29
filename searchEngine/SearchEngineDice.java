@@ -10,7 +10,7 @@ public class SearchEngineDice extends SearchEngineImpl {
     }
 
     @Override
-    protected float computeSimilarity(BagOfWords b1, BagOfWords b2) {
+    protected double computeSimilarity(BagOfWords b1, BagOfWords b2) {
         return b1.getDiceIndice(b2);
     }
 }
